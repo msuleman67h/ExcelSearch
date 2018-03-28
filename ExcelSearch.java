@@ -4,6 +4,7 @@
  * Gives the of searched value/ query
  ************************/
 
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ComponentAdapter;
@@ -25,6 +26,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumnModel;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -43,6 +46,7 @@ public class ExcelSearch {
 	private JTextField searchTextField;
 	private String[] excelRow = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M"};
 	private String keyword = "";
+	private DefaultTableModel tableModel;
 
 	/**
 	 * Launch the application.
@@ -130,6 +134,10 @@ public class ExcelSearch {
 				scrollPane.setBounds(10, 44, frmSearch.getWidth()-35, frmSearch.getHeight()-90);
 				lblFileName.setBounds(frmSearch.getWidth()-390, 10, 247, 23);
 				btnBrowse.setBounds(frmSearch.getWidth()-115, 10, 89, 23);
+				TableColumnModel columnModel = searchResult.getColumnModel();
+				for(int i = 0; i < tableModel.getColumnCount(); i++) {
+					columnModel.getColumn(i).setPreferredWidth((frmSearch.getWidth()-35)/12);
+				}
 			}
 		});
 		frmSearch.getContentPane().add(scrollPane);
@@ -148,7 +156,7 @@ public class ExcelSearch {
 				}
 				));
 		scrollPane.setViewportView(searchResult);
-		DefaultTableModel tableModel = (DefaultTableModel) searchResult.getModel();
+		tableModel = (DefaultTableModel) searchResult.getModel();
 
 		/**
 		 * JTextField searchTextField
@@ -246,20 +254,20 @@ public class ExcelSearch {
 									excelRow[i] = "";
 								}
 							}
-								// Resets all values to evaluate next row
-								arrayIndex = 0;
-								rowHeader = false;
-								rowData = false;
-							}
-						} catch (FileNotFoundException e) {
-							e.printStackTrace();
-						} catch (IOException i) {
-							i.printStackTrace();
+							// Resets all values to evaluate next row
+							arrayIndex = 0;
+							rowHeader = false;
+							rowData = false;
 						}
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException i) {
+						i.printStackTrace();
 					}
 				}
-			});
+			}
+		});
 		btnSearch.setBounds(335, 10, 89, 23);
 		frmSearch.getContentPane().add(btnSearch);
-		}
 	}
+}
